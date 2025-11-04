@@ -173,6 +173,32 @@ enum class EWSWeaponFireMode : uint8
 };
 
 /**
+ * Upgrade stack entry - replaces TMap for network replication
+ */
+USTRUCT(BlueprintType)
+struct FWSUpgradeStackEntry
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName UpgradeID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 StackCount;
+
+	FWSUpgradeStackEntry()
+		: StackCount(0)
+	{
+	}
+
+	FWSUpgradeStackEntry(FName InUpgradeID, int32 InStackCount)
+		: UpgradeID(InUpgradeID)
+		, StackCount(InStackCount)
+	{
+	}
+};
+
+/**
  * Upgrade card data structure
  */
 USTRUCT(BlueprintType)

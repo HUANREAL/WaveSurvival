@@ -55,29 +55,33 @@ void AWSPlayerState::PurchaseUpgrade(const FWSUpgradeCardData& UpgradeCard)
 	// Add to purchased upgrades
 	PurchasedUpgrades.Add(UpgradeCard.CardID);
 	
-	// Track stacks
-	if (UpgradeCard.bStackable)
+	// Track stacks using array instead of map
+	FWSUpgradeStackEntry* ExistingEntry = UpgradeStacks.FindByPredicate([&](const FWSUpgradeStackEntry& Entry) {
+		return Entry.UpgradeID == UpgradeCard.CardID;
+	});
+
+	if (ExistingEntry)
 	{
-		if (UpgradeStacks.Contains(UpgradeCard.CardID))
+		// Increment existing stack
+		if (UpgradeCard.bStackable)
 		{
-			UpgradeStacks[UpgradeCard.CardID]++;
-		}
-		else
-		{
-			UpgradeStacks.Add(UpgradeCard.CardID, 1);
+			ExistingEntry->StackCount++;
 		}
 	}
 	else
 	{
-		UpgradeStacks.Add(UpgradeCard.CardID, 1);
+		// Add new stack entry
+		UpgradeStacks.Add(FWSUpgradeStackEntry(UpgradeCard.CardID, 1));
 	}
 
 	// Apply upgrade effects
 	ApplyUpgradeEffects(UpgradeCard);
 	
+	// Get the stack count for logging
+	int32 CurrentStacks = GetUpgradeStacks(UpgradeCard.CardID);
 	UE_LOG(LogTemp, Log, TEXT("Upgrade purchased: %s (Stacks: %d)"), 
 		*UpgradeCard.CardName.ToString(), 
-		UpgradeStacks[UpgradeCard.CardID]);
+		CurrentStacks);
 }
 
 bool AWSPlayerState::HasUpgrade(FName UpgradeID) const
@@ -87,11 +91,11 @@ bool AWSPlayerState::HasUpgrade(FName UpgradeID) const
 
 int32 AWSPlayerState::GetUpgradeStacks(FName UpgradeID) const
 {
-	if (UpgradeStacks.Contains(UpgradeID))
-	{
-		return UpgradeStacks[UpgradeID];
-	}
-	return 0;
+	const FWSUpgradeStackEntry* Entry = UpgradeStacks.FindByPredicate([&](const FWSUpgradeStackEntry& StackEntry) {
+		return StackEntry.UpgradeID == UpgradeID;
+	});
+	
+	return Entry ? Entry->StackCount : 0;
 }
 
 void AWSPlayerState::OnKill()

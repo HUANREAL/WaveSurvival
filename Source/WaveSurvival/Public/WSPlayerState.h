@@ -40,8 +40,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, Replicated, Category = "Upgrades")
 	TArray<FName> PurchasedUpgrades;
 
+	// Upgrades - stored as array for replication support
 	UPROPERTY(BlueprintReadWrite, Replicated, Category = "Upgrades")
-	TMap<FName, int32> UpgradeStacks;
+	TArray<FWSUpgradeStackEntry> UpgradeStacks;
 
 	// Statistics
 	UPROPERTY(BlueprintReadWrite, Replicated, Category = "Stats")
