@@ -58,18 +58,18 @@ void AWSPlayerState::PurchaseUpgrade(const FWSUpgradeCardData& UpgradeCard)
 	// Track stacks
 	if (UpgradeCard.bStackable)
 	{
-		if (UpgradeStacks.Contains(UpgradeCard.CardID))
+		if (HasUpgradeStackEntry(UpgradeCard.CardID))
 		{
-			UpgradeStacks[UpgradeCard.CardID]++;
+			SetUpgradeStacks(UpgradeCard.CardID, GetUpgradeStacks(UpgradeCard.CardID) + 1);
 		}
 		else
 		{
-			UpgradeStacks.Add(UpgradeCard.CardID, 1);
+			SetUpgradeStacks(UpgradeCard.CardID, 1);
 		}
 	}
 	else
 	{
-		UpgradeStacks.Add(UpgradeCard.CardID, 1);
+		SetUpgradeStacks(UpgradeCard.CardID, 1);
 	}
 
 	// Apply upgrade effects
@@ -77,7 +77,7 @@ void AWSPlayerState::PurchaseUpgrade(const FWSUpgradeCardData& UpgradeCard)
 	
 	UE_LOG(LogTemp, Log, TEXT("Upgrade purchased: %s (Stacks: %d)"), 
 		*UpgradeCard.CardName.ToString(), 
-		UpgradeStacks[UpgradeCard.CardID]);
+		GetUpgradeStacks(UpgradeCard.CardID));
 }
 
 bool AWSPlayerState::HasUpgrade(FName UpgradeID) const
@@ -87,11 +87,33 @@ bool AWSPlayerState::HasUpgrade(FName UpgradeID) const
 
 int32 AWSPlayerState::GetUpgradeStacks(FName UpgradeID) const
 {
-	if (UpgradeStacks.Contains(UpgradeID))
+	int32 Index = UpgradeStackKeys.Find(UpgradeID);
+	if (Index != INDEX_NONE)
 	{
-		return UpgradeStacks[UpgradeID];
+		return UpgradeStackValues[Index];
 	}
 	return 0;
+}
+
+void AWSPlayerState::SetUpgradeStacks(FName UpgradeID, int32 Stacks)
+{
+	int32 Index = UpgradeStackKeys.Find(UpgradeID);
+	if (Index != INDEX_NONE)
+	{
+		// Update existing entry
+		UpgradeStackValues[Index] = Stacks;
+	}
+	else
+	{
+		// Add new entry
+		UpgradeStackKeys.Add(UpgradeID);
+		UpgradeStackValues.Add(Stacks);
+	}
+}
+
+bool AWSPlayerState::HasUpgradeStackEntry(FName UpgradeID) const
+{
+	return UpgradeStackKeys.Contains(UpgradeID);
 }
 
 void AWSPlayerState::OnKill()
@@ -182,7 +204,8 @@ void AWSPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	DOREPLIFETIME(AWSPlayerState, CurrentState);
 	DOREPLIFETIME(AWSPlayerState, Currency);
 	DOREPLIFETIME(AWSPlayerState, PurchasedUpgrades);
-	DOREPLIFETIME(AWSPlayerState, UpgradeStacks);
+	DOREPLIFETIME(AWSPlayerState, UpgradeStackKeys);
+	DOREPLIFETIME(AWSPlayerState, UpgradeStackValues);
 	DOREPLIFETIME(AWSPlayerState, Kills);
 	DOREPLIFETIME(AWSPlayerState, Deaths);
 	DOREPLIFETIME(AWSPlayerState, Revives);

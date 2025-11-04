@@ -40,8 +40,12 @@ public:
 	UPROPERTY(BlueprintReadWrite, Replicated, Category = "Upgrades")
 	TArray<FName> PurchasedUpgrades;
 
+	// Upgrade stacks stored as parallel arrays (replicated maps not supported)
 	UPROPERTY(BlueprintReadWrite, Replicated, Category = "Upgrades")
-	TMap<FName, int32> UpgradeStacks;
+	TArray<FName> UpgradeStackKeys;
+
+	UPROPERTY(BlueprintReadWrite, Replicated, Category = "Upgrades")
+	TArray<int32> UpgradeStackValues;
 
 	// Statistics
 	UPROPERTY(BlueprintReadWrite, Replicated, Category = "Stats")
@@ -71,6 +75,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Upgrades")
 	int32 GetUpgradeStacks(FName UpgradeID) const;
+
+	// Helper methods for managing upgrade stacks
+	void SetUpgradeStacks(FName UpgradeID, int32 Stacks);
+	bool HasUpgradeStackEntry(FName UpgradeID) const;
 
 	UFUNCTION(BlueprintCallable, Category = "Stats")
 	void OnKill();
