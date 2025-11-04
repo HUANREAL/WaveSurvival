@@ -399,7 +399,6 @@ This is an MVP implementation. Contributions are welcome! Please ensure:
 
 For issues, questions, or suggestions:
 - Create an issue on GitHub
-- Contact: support@wavesurvival.com
 
 ---
 
