@@ -5,6 +5,7 @@
 #include "OnlineSubsystemUtils.h"
 #include "Interfaces/OnlineSessionInterface.h"
 #include "OnlineSessionSettings.h"
+#include "OnlineSessionNames.h"
 
 UWSGameInstance::UWSGameInstance()
 {
@@ -106,7 +107,7 @@ void UWSGameInstance::FindSessions()
 	UE_LOG(LogTemp, Log, TEXT("Searching for sessions"));
 }
 
-void UWSGameInstance::JoinSession(int32 SessionIndex)
+void UWSGameInstance::JoinSessionByIndex(int32 SessionIndex)
 {
 	IOnlineSubsystem* OnlineSubsystem = IOnlineSubsystem::Get();
 	if (!OnlineSubsystem)

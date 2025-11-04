@@ -47,7 +47,7 @@ public:
 	void FindSessions();
 
 	UFUNCTION(BlueprintCallable, Category = "Online")
-	void JoinSession(int32 SessionIndex);
+	void JoinSessionByIndex(int32 SessionIndex);
 
 	// Leaderboard
 	UFUNCTION(BlueprintCallable, Category = "Leaderboard")
