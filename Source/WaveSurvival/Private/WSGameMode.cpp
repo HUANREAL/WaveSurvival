@@ -73,8 +73,8 @@ void AWSGameMode::SpawnWaveEnemies()
 	
 	if (WaveConfig.bIsBossWave)
 	{
-		// Spawn boss at center
-		FVector BossLocation = GetRandomSpawnLocation();
+		// Spawn boss at dedicated location
+		FVector BossLocation = GetBossSpawnLocation();
 		SpawnEnemy(WaveConfig.BossType, BossLocation);
 		
 		UE_LOG(LogTemp, Log, TEXT("Spawning boss: %d"), (int32)WaveConfig.BossType);
@@ -200,6 +200,18 @@ FVector AWSGameMode::GetRandomSpawnLocation()
 	return SpawnLocation;
 }
 
+FVector AWSGameMode::GetBossSpawnLocation()
+{
+	// Boss spawns at map center for dramatic entrance
+	// This provides a predictable, dramatic spawn point for boss encounters
+	FVector MapCenter = FVector::ZeroVector;
+	
+	// Slightly elevated for visual impact
+	MapCenter.Z = 100.0f;
+	
+	return MapCenter;
+}
+
 FVector AWSGameMode::GetSafeRespawnLocation()
 {
 	// Find location with fewest enemies nearby
@@ -217,7 +229,7 @@ void AWSGameMode::SetupWaveConfigurations()
 	{
 		FWSWaveConfig Config;
 		Config.WaveNumber = i;
-		Config.BaseEnemyCountPerPlayer = 250;
+		Config.BaseEnemyCountPerPlayer = BaseEnemyCountPerPlayer;
 		Config.DifficultyMultiplier = 1.0f + (i * 0.1f);
 		Config.bIsBossWave = false;
 		
@@ -269,6 +281,8 @@ FWSWaveConfig AWSGameMode::GetWaveConfig(int32 WaveNumber)
 		{
 			return MainModeWaveConfigs[WaveNumber - 1];
 		}
+		// If in MainMode but WaveNumber is invalid, return default config
+		return FWSWaveConfig();
 	}
 	else // Survival Mode
 	{
@@ -283,7 +297,7 @@ FWSWaveConfig AWSGameMode::GetWaveConfig(int32 WaveNumber)
 void AWSGameMode::GenerateSurvivalWaveConfig(int32 WaveNumber, FWSWaveConfig& OutConfig)
 {
 	OutConfig.WaveNumber = WaveNumber;
-	OutConfig.BaseEnemyCountPerPlayer = 250;
+	OutConfig.BaseEnemyCountPerPlayer = BaseEnemyCountPerPlayer;
 	OutConfig.DifficultyMultiplier = 1.0f + (WaveNumber * 0.15f);
 	OutConfig.bIsBossWave = (WaveNumber % 10 == 0); // Boss every 10 waves
 	

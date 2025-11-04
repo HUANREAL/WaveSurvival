@@ -189,6 +189,9 @@ void AWSWeaponBase::PerformHitscan()
 			bool bIsCritical = false;
 			float Damage = CalculateDamage(bIsCritical);
 			
+			// Check if this damage will kill the enemy before applying it
+			bool bWillKill = Enemy->EnemyStats.CurrentHealth <= Damage;
+			
 			Enemy->TakeDamageCustom(Damage, OwnerCharacter, bIsCritical);
 			
 			// Apply elemental effect
@@ -197,11 +200,14 @@ void AWSWeaponBase::PerformHitscan()
 				ApplyElementalEffect(Enemy);
 			}
 
-			// Award kill credit
-			AWSPlayerState* PS = Cast<AWSPlayerState>(OwnerCharacter->GetPlayerState());
-			if (PS && Enemy->EnemyStats.CurrentHealth <= 0)
+			// Award kill credit if this damage killed the enemy
+			if (bWillKill)
 			{
-				PS->OnKill();
+				AWSPlayerState* PS = Cast<AWSPlayerState>(OwnerCharacter->GetPlayerState());
+				if (PS)
+				{
+					PS->OnKill();
+				}
 			}
 		}
 

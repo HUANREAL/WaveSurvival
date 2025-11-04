@@ -40,6 +40,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = "Wave")
 	float ShopPhaseDuration;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Wave")
+	int32 BaseEnemyCountPerPlayer = 250;
+
 	// Game mode and difficulty
 	UPROPERTY(BlueprintReadOnly, Replicated, Category = "Game")
 	EWSGameMode GameMode;

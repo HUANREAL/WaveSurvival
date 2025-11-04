@@ -69,14 +69,14 @@ void AWSGameState::StartNextWave()
 		}
 		else
 		{
-			TotalEnemiesThisWave = 250 * ActivePlayerCount; // Base: 250 per player
+			TotalEnemiesThisWave = BaseEnemyCountPerPlayer * ActivePlayerCount;
 		}
 	}
 	else // Survival Mode
 	{
 		// Scaling formula for survival
 		float WaveMultiplier = 1.0f + (CurrentWaveNumber * 0.15f);
-		TotalEnemiesThisWave = FMath::CeilToInt(250 * ActivePlayerCount * WaveMultiplier);
+		TotalEnemiesThisWave = FMath::CeilToInt(BaseEnemyCountPerPlayer * ActivePlayerCount * WaveMultiplier);
 	}
 	
 	RemainingEnemies = TotalEnemiesThisWave;

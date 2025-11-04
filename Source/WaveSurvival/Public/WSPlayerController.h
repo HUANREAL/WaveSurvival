@@ -72,6 +72,16 @@ protected:
 	UPROPERTY()
 	AWSPlayerState* WSPlayerState;
 
+	// Card deck configuration
+	UPROPERTY(EditDefaultsOnly, Category = "Card Deck")
+	int32 GenericCardCount = 15;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Card Deck")
+	int32 CharacterSpecificCardCount = 30;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Card Deck")
+	int32 LegendaryCardCount = 3;
+
 	// Current card deck
 	UPROPERTY()
 	TArray<FWSUpgradeCardData> AvailableCards;

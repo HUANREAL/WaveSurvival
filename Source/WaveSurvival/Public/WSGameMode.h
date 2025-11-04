@@ -52,11 +52,17 @@ public:
 	FVector GetRandomSpawnLocation();
 
 	UFUNCTION(BlueprintCallable, Category = "Spawn")
+	FVector GetBossSpawnLocation();
+
+	UFUNCTION(BlueprintCallable, Category = "Spawn")
 	FVector GetSafeRespawnLocation();
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Wave")
 	TArray<FWSWaveConfig> MainModeWaveConfigs;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Wave")
+	int32 BaseEnemyCountPerPlayer = 250;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Enemy")
 	TMap<EWSEnemyType, TSubclassOf<class AWSEnemyBase>> EnemyClasses;

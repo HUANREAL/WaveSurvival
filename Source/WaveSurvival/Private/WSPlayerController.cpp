@@ -153,7 +153,7 @@ void AWSPlayerController::InitializeCardDeck()
 		"MovementSpeed"
 	};
 
-	for (int32 i = 0; i < 15; i++) // 15 generic cards
+	for (int32 i = 0; i < GenericCardCount; i++)
 	{
 		FWSUpgradeCardData Card;
 		FName UpgradeType = GenericUpgrades[i % GenericUpgrades.Num()];
@@ -171,8 +171,8 @@ void AWSPlayerController::InitializeCardDeck()
 		AvailableCards.Add(Card);
 	}
 
-	// Character-specific cards (30 cards)
-	for (int32 i = 0; i < 30; i++)
+	// Character-specific cards
+	for (int32 i = 0; i < CharacterSpecificCardCount; i++)
 	{
 		FWSUpgradeCardData Card;
 		Card.CardID = FName(*FString::Printf(TEXT("CharacterSpecific_%d"), i));
@@ -190,8 +190,8 @@ void AWSPlayerController::InitializeCardDeck()
 		AvailableCards.Add(Card);
 	}
 
-	// Legendary cards (3 cards)
-	for (int32 i = 0; i < 3; i++)
+	// Legendary cards
+	for (int32 i = 0; i < LegendaryCardCount; i++)
 	{
 		FWSUpgradeCardData Card;
 		Card.CardID = FName(*FString::Printf(TEXT("Legendary_%d"), i));
