@@ -108,7 +108,7 @@ void AWSGameMode::SpawnWaveEnemies()
 		
 		// Step 2: Distribute remaining enemies based on largest remainders
 		int32 Remaining = TotalEnemiesToSpawn - TotalBaseCount;
-		SpawnInfos.Sort([](const FEnemySpawnInfo& A, const FEnemySpawnInfo& B) {
+		SpawnInfos.StableSort([](const FEnemySpawnInfo& A, const FEnemySpawnInfo& B) {
 			return A.Remainder > B.Remainder;
 		});
 		
