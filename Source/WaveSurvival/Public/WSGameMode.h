@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "WSTypes.h"
+#include "WSEnemyBase.h"
 #include "WSGameMode.generated.h"
 
 class AWSGameState;
@@ -65,7 +66,7 @@ protected:
 	int32 BaseEnemyCountPerPlayer = 250;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Enemy")
-	TMap<EWSEnemyType, TSubclassOf<class AWSEnemyBase>> EnemyClasses;
+	TMap<EWSEnemyType, TSubclassOf<AWSEnemyBase>> EnemyClasses;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
 	TArray<AActor*> EnemySpawnPoints;

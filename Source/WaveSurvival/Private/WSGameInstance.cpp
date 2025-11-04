@@ -4,6 +4,7 @@
 #include "OnlineSubsystem.h"
 #include "OnlineSubsystemUtils.h"
 #include "Interfaces/OnlineSessionInterface.h"
+#include "OnlineSessionSettings.h"
 
 UWSGameInstance::UWSGameInstance()
 {
@@ -75,6 +76,7 @@ void UWSGameInstance::CreateSession(int32 MaxPlayers)
 	SessionSettings.bUsesPresence = true;
 	SessionSettings.bAllowJoinViaPresence = true;
 
+	// Use host player num instead of UniqueNetId for compatibility
 	SessionInterface->CreateSession(0, FName("WaveSurvivalSession"), SessionSettings);
 	
 	UE_LOG(LogTemp, Log, TEXT("Creating session for %d players"), MaxPlayers);
@@ -97,14 +99,14 @@ void UWSGameInstance::FindSessions()
 	TSharedRef<FOnlineSessionSearch> SearchSettings = MakeShareable(new FOnlineSessionSearch());
 	SearchSettings->bIsLanQuery = false;
 	SearchSettings->MaxSearchResults = 20;
-	SearchSettings->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
+	SearchSettings->QuerySettings.Set(FName("PRESENCESEARCH"), true, EOnlineComparisonOp::Equals);
 
 	SessionInterface->FindSessions(0, SearchSettings);
 	
 	UE_LOG(LogTemp, Log, TEXT("Searching for sessions"));
 }
 
-void UWSGameInstance::JoinSession(int32 SessionIndex)
+void UWSGameInstance::JoinSessionByIndex(int32 SessionIndex)
 {
 	IOnlineSubsystem* OnlineSubsystem = IOnlineSubsystem::Get();
 	if (!OnlineSubsystem)
@@ -178,9 +180,9 @@ void UWSGameInstance::OnFindSessionsComplete(bool bWasSuccessful)
 	}
 }
 
-void UWSGameInstance::OnJoinSessionComplete(FName SessionName, bool bWasSuccessful)
+void UWSGameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
 {
-	if (bWasSuccessful)
+	if (Result == EOnJoinSessionCompleteResult::Success)
 	{
 		UE_LOG(LogTemp, Log, TEXT("Joined session successfully: %s"), *SessionName.ToString());
 	}

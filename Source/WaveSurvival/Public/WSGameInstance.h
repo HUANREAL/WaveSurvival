@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "Interfaces/OnlineSessionInterface.h"
 #include "WSTypes.h"
 #include "WSGameInstance.generated.h"
 
@@ -46,7 +47,7 @@ public:
 	void FindSessions();
 
 	UFUNCTION(BlueprintCallable, Category = "Online")
-	void JoinSession(int32 SessionIndex);
+	void JoinSessionByIndex(int32 SessionIndex);
 
 	// Leaderboard
 	UFUNCTION(BlueprintCallable, Category = "Leaderboard")
@@ -61,5 +62,5 @@ protected:
 
 	void OnCreateSessionComplete(FName SessionName, bool bWasSuccessful);
 	void OnFindSessionsComplete(bool bWasSuccessful);
-	void OnJoinSessionComplete(FName SessionName, bool bWasSuccessful);
+	void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
 };

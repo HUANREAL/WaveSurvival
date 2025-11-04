@@ -173,6 +173,33 @@ enum class EWSWeaponFireMode : uint8
 };
 
 /**
+ * Upgrade stack entry - replaces TMap for network replication
+ */
+USTRUCT(BlueprintType)
+struct FWSUpgradeStackEntry
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName UpgradeID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 StackCount;
+
+	FWSUpgradeStackEntry()
+		: UpgradeID(NAME_None)
+		, StackCount(0)
+	{
+	}
+
+	FWSUpgradeStackEntry(FName InUpgradeID, int32 InStackCount)
+		: UpgradeID(InUpgradeID)
+		, StackCount(InStackCount)
+	{
+	}
+};
+
+/**
  * Upgrade card data structure
  */
 USTRUCT(BlueprintType)
@@ -227,6 +254,12 @@ struct FWSUpgradeCardData
 		, EffectValue(0.1f)
 	{
 	}
+
+	// Equality operator for TArray operations
+	bool operator==(const FWSUpgradeCardData& Other) const
+	{
+		return CardID == Other.CardID;
+	}
 };
 
 /**
@@ -238,31 +271,22 @@ struct FWSWaveConfig
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 WaveNumber;
+	int32 WaveNumber = 1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 BaseEnemyCountPerPlayer;
+	int32 BaseEnemyCountPerPlayer = 250;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<EWSEnemyType, float> EnemyComposition;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float DifficultyMultiplier;
+	float DifficultyMultiplier = 1.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool bIsBossWave;
+	bool bIsBossWave = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EWSEnemyType BossType;
-
-	FWSWaveConfig()
-		: WaveNumber(1)
-		, BaseEnemyCountPerPlayer(250)
-		, DifficultyMultiplier(1.0f)
-		, bIsBossWave(false)
-		, BossType(EWSEnemyType::Vruuknuix)
-	{
-	}
+	EWSEnemyType BossType = EWSEnemyType::Vruuknuix;
 };
 
 /**
