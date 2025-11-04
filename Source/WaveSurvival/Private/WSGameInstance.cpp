@@ -5,7 +5,6 @@
 #include "OnlineSubsystemUtils.h"
 #include "Interfaces/OnlineSessionInterface.h"
 #include "OnlineSessionSettings.h"
-#include "OnlineSessionNames.h"
 
 UWSGameInstance::UWSGameInstance()
 {
@@ -100,7 +99,7 @@ void UWSGameInstance::FindSessions()
 	TSharedRef<FOnlineSessionSearch> SearchSettings = MakeShareable(new FOnlineSessionSearch());
 	SearchSettings->bIsLanQuery = false;
 	SearchSettings->MaxSearchResults = 20;
-	SearchSettings->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
+	SearchSettings->QuerySettings.Set(FName("PRESENCESEARCH"), true, EOnlineComparisonOp::Equals);
 
 	SessionInterface->FindSessions(0, SearchSettings);
 	
