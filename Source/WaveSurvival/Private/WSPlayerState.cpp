@@ -88,7 +88,7 @@ bool AWSPlayerState::HasUpgrade(FName UpgradeID) const
 int32 AWSPlayerState::GetUpgradeStacks(FName UpgradeID) const
 {
 	int32 Index = UpgradeStackKeys.Find(UpgradeID);
-	if (Index != INDEX_NONE)
+	if (Index != INDEX_NONE && Index < UpgradeStackValues.Num())
 	{
 		return UpgradeStackValues[Index];
 	}
@@ -105,9 +105,25 @@ void AWSPlayerState::SetUpgradeStacks(FName UpgradeID, int32 Stacks)
 	}
 	else
 	{
-		// Add new entry
+		// Add new entry - ensure arrays stay synchronized
 		UpgradeStackKeys.Add(UpgradeID);
 		UpgradeStackValues.Add(Stacks);
+		
+		// Safety check: ensure arrays remain synchronized
+		if (UpgradeStackKeys.Num() != UpgradeStackValues.Num())
+		{
+			UE_LOG(LogTemp, Error, TEXT("UpgradeStacks arrays desynchronized! Keys: %d, Values: %d"), 
+				UpgradeStackKeys.Num(), UpgradeStackValues.Num());
+			// Remove the last added element to resync
+			if (UpgradeStackKeys.Num() > UpgradeStackValues.Num())
+			{
+				UpgradeStackKeys.RemoveAt(UpgradeStackKeys.Num() - 1);
+			}
+			else
+			{
+				UpgradeStackValues.RemoveAt(UpgradeStackValues.Num() - 1);
+			}
+		}
 	}
 }
 
