@@ -187,7 +187,8 @@ struct FWSUpgradeStackEntry
 	int32 StackCount;
 
 	FWSUpgradeStackEntry()
-		: StackCount(0)
+		: UpgradeID(NAME_None)
+		, StackCount(0)
 	{
 	}
 

@@ -60,18 +60,31 @@ void AWSPlayerState::PurchaseUpgrade(const FWSUpgradeCardData& UpgradeCard)
 		return Entry.UpgradeID == UpgradeCard.CardID;
 	});
 
-	if (ExistingEntry)
+	if (UpgradeCard.bStackable)
 	{
-		// Increment existing stack
-		if (UpgradeCard.bStackable)
+		if (ExistingEntry)
 		{
+			// Increment existing stack for stackable upgrades
 			ExistingEntry->StackCount++;
+		}
+		else
+		{
+			// Add new stack entry for stackable upgrade
+			UpgradeStacks.Add(FWSUpgradeStackEntry(UpgradeCard.CardID, 1));
 		}
 	}
 	else
 	{
-		// Add new stack entry
-		UpgradeStacks.Add(FWSUpgradeStackEntry(UpgradeCard.CardID, 1));
+		if (ExistingEntry)
+		{
+			// Non-stackable upgrade already exists, set count to 1 (matching original TMap behavior)
+			ExistingEntry->StackCount = 1;
+		}
+		else
+		{
+			// Add new entry for non-stackable upgrade
+			UpgradeStacks.Add(FWSUpgradeStackEntry(UpgradeCard.CardID, 1));
+		}
 	}
 
 	// Apply upgrade effects
