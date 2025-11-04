@@ -6,6 +6,9 @@
 
 AWSPlayerController::AWSPlayerController()
 {
+	// Initialize random stream with a seed for deterministic shuffling
+	// In multiplayer, this should use a replicated seed from the server
+	ShuffleRandomStream.Initialize(FMath::Rand());
 }
 
 void AWSPlayerController::BeginPlay()
@@ -216,10 +219,12 @@ void AWSPlayerController::InitializeCardDeck()
 
 void AWSPlayerController::ShuffleCardDeck()
 {
-	// Fisher-Yates shuffle
+	// Fisher-Yates shuffle using FRandomStream for deterministic behavior in multiplayer
+	// Note: In production, the seed should be replicated from the server to ensure
+	// all clients have the same deck order
 	for (int32 i = AvailableCards.Num() - 1; i > 0; i--)
 	{
-		int32 j = FMath::RandRange(0, i);
+		int32 j = ShuffleRandomStream.RandRange(0, i);
 		AvailableCards.Swap(i, j);
 	}
 	

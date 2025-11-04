@@ -44,11 +44,11 @@ void AWSEnemyBase::Tick(float DeltaTime)
 	// Move towards target (AI would handle this in a real implementation)
 }
 
-void AWSEnemyBase::TakeDamageCustom(float DamageAmount, AActor* DamageCauser, bool bIsCritical)
+bool AWSEnemyBase::TakeDamageCustom(float DamageAmount, AActor* DamageCauser, bool bIsCritical)
 {
 	if (EnemyStats.CurrentHealth <= 0)
 	{
-		return;
+		return false;
 	}
 
 	// Check if can take critical damage
@@ -57,13 +57,14 @@ void AWSEnemyBase::TakeDamageCustom(float DamageAmount, AActor* DamageCauser, bo
 		bIsCritical = false;
 	}
 
-	// Apply armor reduction
-	float FinalDamage = DamageAmount * (1.0f - EnemyStats.Armor);
+	// Apply armor reduction with clamped armor value
+	float ClampedArmor = FMath::Clamp(EnemyStats.Armor, 0.0f, 1.0f);
+	float FinalDamage = DamageAmount * (1.0f - ClampedArmor);
 
 	// Apply critical multiplier
 	if (bIsCritical)
 	{
-		FinalDamage *= 2.0f;
+		FinalDamage *= CriticalDamageMultiplier;
 	}
 
 	EnemyStats.CurrentHealth -= FinalDamage;
@@ -83,13 +84,17 @@ void AWSEnemyBase::TakeDamageCustom(float DamageAmount, AActor* DamageCauser, bo
 
 	UpdateHealthBar();
 
+	bool bKilledEnemy = false;
 	if (EnemyStats.CurrentHealth <= 0)
 	{
+		bKilledEnemy = true;
 		Die();
 	}
 	
 	UE_LOG(LogTemp, Log, TEXT("Enemy took %f damage (Critical: %d), Health: %f"), 
 		FinalDamage, bIsCritical, EnemyStats.CurrentHealth);
+	
+	return bKilledEnemy;
 }
 
 void AWSEnemyBase::Die()

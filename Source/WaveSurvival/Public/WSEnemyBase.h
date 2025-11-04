@@ -31,9 +31,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Enemy")
 	bool bIsBoss;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Combat")
+	float CriticalDamageMultiplier = 2.0f;
+
 	// Combat
 	UFUNCTION(BlueprintCallable, Category = "Combat")
-	virtual void TakeDamageCustom(float DamageAmount, AActor* DamageCauser, bool bIsCritical);
+	virtual bool TakeDamageCustom(float DamageAmount, AActor* DamageCauser, bool bIsCritical);
 
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	virtual void Die();

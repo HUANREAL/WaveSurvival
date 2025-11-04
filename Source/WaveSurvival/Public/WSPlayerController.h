@@ -94,6 +94,10 @@ protected:
 
 	FWSUpgradeCardData CurrentCard;
 
+	// Random stream for deterministic shuffling in multiplayer
+	UPROPERTY()
+	FRandomStream ShuffleRandomStream;
+
 	void InitializeCardDeck();
 	void ShuffleCardDeck();
 	FWSUpgradeCardData GetNextCard();

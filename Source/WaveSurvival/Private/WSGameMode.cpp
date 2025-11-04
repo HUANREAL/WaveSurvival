@@ -84,14 +84,46 @@ void AWSGameMode::SpawnWaveEnemies()
 		// Spawn regular enemies based on composition
 		int32 TotalEnemiesToSpawn = WSGameState->TotalEnemiesThisWave;
 		
+		// Calculate exact spawn counts with proper distribution to avoid over-spawning
+		// due to rounding up multiple times
+		struct FEnemySpawnInfo
+		{
+			EWSEnemyType EnemyType;
+			int32 BaseCount;
+			float Remainder;
+		};
+		
+		TArray<FEnemySpawnInfo> SpawnInfos;
+		int32 TotalBaseCount = 0;
+		
+		// Step 1: Calculate base counts and remainders
 		for (const TPair<EWSEnemyType, float>& Composition : WaveConfig.EnemyComposition)
 		{
-			int32 EnemyCount = FMath::CeilToInt(TotalEnemiesToSpawn * Composition.Value);
-			
-			for (int32 i = 0; i < EnemyCount; i++)
+			float ExactCount = TotalEnemiesToSpawn * Composition.Value;
+			int32 BaseCount = FMath::FloorToInt(ExactCount);
+			float Remainder = ExactCount - BaseCount;
+			SpawnInfos.Add({Composition.Key, BaseCount, Remainder});
+			TotalBaseCount += BaseCount;
+		}
+		
+		// Step 2: Distribute remaining enemies based on largest remainders
+		int32 Remaining = TotalEnemiesToSpawn - TotalBaseCount;
+		SpawnInfos.Sort([](const FEnemySpawnInfo& A, const FEnemySpawnInfo& B) {
+			return A.Remainder > B.Remainder;
+		});
+		
+		for (int32 i = 0; i < Remaining && i < SpawnInfos.Num(); ++i)
+		{
+			SpawnInfos[i].BaseCount += 1;
+		}
+		
+		// Step 3: Spawn enemies with correct counts
+		for (const FEnemySpawnInfo& Info : SpawnInfos)
+		{
+			for (int32 i = 0; i < Info.BaseCount; i++)
 			{
 				FVector SpawnLocation = GetRandomSpawnLocation();
-				SpawnEnemy(Composition.Key, SpawnLocation);
+				SpawnEnemy(Info.EnemyType, SpawnLocation);
 			}
 		}
 		

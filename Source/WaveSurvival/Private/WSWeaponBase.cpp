@@ -189,10 +189,10 @@ void AWSWeaponBase::PerformHitscan()
 			bool bIsCritical = false;
 			float Damage = CalculateDamage(bIsCritical);
 			
-			// Check if this damage will kill the enemy before applying it
-			bool bWillKill = Enemy->EnemyStats.CurrentHealth <= Damage;
-			
-			Enemy->TakeDamageCustom(Damage, OwnerCharacter, bIsCritical);
+			// Apply damage and check if it killed the enemy
+			// Note: In multiplayer, concurrent damage from multiple players may still cause
+			// race conditions. For production, implement server-authoritative kill tracking.
+			bool bKilledEnemy = Enemy->TakeDamageCustom(Damage, OwnerCharacter, bIsCritical);
 			
 			// Apply elemental effect
 			if (ElementalType != EWSElementalType::None)
@@ -200,8 +200,8 @@ void AWSWeaponBase::PerformHitscan()
 				ApplyElementalEffect(Enemy);
 			}
 
-			// Award kill credit if this damage killed the enemy
-			if (bWillKill)
+			// Award kill credit based on the actual result from TakeDamageCustom
+			if (bKilledEnemy)
 			{
 				AWSPlayerState* PS = Cast<AWSPlayerState>(OwnerCharacter->GetPlayerState());
 				if (PS)
