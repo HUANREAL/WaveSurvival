@@ -383,10 +383,6 @@ The system tracks:
 
 This data should be sent to an analytics backend for balance adjustments.
 
-## License
-
-[MIT License](LICENSE)
-
 ## Contributing
 
 This is an MVP implementation. Contributions are welcome! Please ensure:
