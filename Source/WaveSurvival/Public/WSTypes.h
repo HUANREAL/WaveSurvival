@@ -271,31 +271,22 @@ struct FWSWaveConfig
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 WaveNumber;
+	int32 WaveNumber = 1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 BaseEnemyCountPerPlayer;
+	int32 BaseEnemyCountPerPlayer = 250;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<EWSEnemyType, float> EnemyComposition;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float DifficultyMultiplier;
+	float DifficultyMultiplier = 1.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool bIsBossWave;
+	bool bIsBossWave = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EWSEnemyType BossType;
-
-	FWSWaveConfig()
-		: WaveNumber(1)
-		, BaseEnemyCountPerPlayer(250)
-		, DifficultyMultiplier(1.0f)
-		, bIsBossWave(false)
-		, BossType(EWSEnemyType::Vruuknuix)
-	{
-	}
+	EWSEnemyType BossType = EWSEnemyType::Vruuknuix;
 };
 
 /**
