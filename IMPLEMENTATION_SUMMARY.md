@@ -341,12 +341,7 @@ The MVP is successful when:
 
 - **Documentation**: See README.md and ASSET_INTEGRATION.md
 - **Code Reference**: All classes well-documented inline
-- **Unreal Docs**: https://docs.unrealengine.com/5.3
 - **EOS Docs**: https://dev.epicgames.com/docs/services
-
-## License
-
-MIT License - See LICENSE file
 
 ---
 
