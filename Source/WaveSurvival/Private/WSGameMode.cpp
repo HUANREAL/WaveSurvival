@@ -322,8 +322,6 @@ FWSWaveConfig AWSGameMode::GetWaveConfig(int32 WaveNumber)
 		GenerateSurvivalWaveConfig(WaveNumber, SurvivalConfig);
 		return SurvivalConfig;
 	}
-	
-	return FWSWaveConfig();
 }
 
 void AWSGameMode::GenerateSurvivalWaveConfig(int32 WaveNumber, FWSWaveConfig& OutConfig)
