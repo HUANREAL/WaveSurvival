@@ -140,7 +140,7 @@ void AWSGameMode::SpawnEnemy(EWSEnemyType EnemyType, FVector SpawnLocation)
 		return;
 	}
 
-	TSubclassOf<class AWSEnemyBase> EnemyClass = EnemyClasses[EnemyType];
+	TSubclassOf<AWSEnemyBase> EnemyClass = EnemyClasses[EnemyType];
 	
 	if (!EnemyClass)
 	{

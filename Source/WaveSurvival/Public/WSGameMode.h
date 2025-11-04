@@ -9,6 +9,7 @@
 
 class AWSGameState;
 class AWSPlayerController;
+class AWSEnemyBase;
 
 /**
  * Game Mode handles game rules and spawning logic
@@ -65,7 +66,7 @@ protected:
 	int32 BaseEnemyCountPerPlayer = 250;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Enemy")
-	TMap<EWSEnemyType, TSubclassOf<class AWSEnemyBase>> EnemyClasses;
+	TMap<EWSEnemyType, TSubclassOf<AWSEnemyBase>> EnemyClasses;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
 	TArray<AActor*> EnemySpawnPoints;
