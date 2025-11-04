@@ -254,6 +254,12 @@ struct FWSUpgradeCardData
 		, EffectValue(0.1f)
 	{
 	}
+
+	// Equality operator for TArray operations
+	bool operator==(const FWSUpgradeCardData& Other) const
+	{
+		return CardID == Other.CardID;
+	}
 };
 
 /**
