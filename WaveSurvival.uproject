@@ -1,31 +1,31 @@
 {
-"FileVersion": 3,
-"EngineAssociation": "5.3",
-"Category": "",
-"Description": "Co-op Wave Survival Sci-Fi Horror Game",
-"Modules": [
-{
-"Name": "WaveSurvival",
-"Type": "Runtime",
-"LoadingPhase": "Default",
-"AdditionalDependencies": [
-"Engine",
-"OnlineSubsystemEOS"
-]
-}
-],
-"Plugins": [
-{
-"Name": "OnlineSubsystemEOS",
-"Enabled": true
-},
-{
-"Name": "EOSShared",
-"Enabled": true
-}
-],
-"TargetPlatforms": [
-"Windows",
-"Linux"
-]
+	"FileVersion": 3,
+	"EngineAssociation": "5.6",
+	"Category": "",
+	"Description": "Co-op Wave Survival Sci-Fi Horror Game",
+	"Modules": [
+		{
+			"Name": "WaveSurvival",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine",
+				"OnlineSubsystemEOS"
+			]
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "OnlineSubsystemEOS",
+			"Enabled": true
+		},
+		{
+			"Name": "EOSShared",
+			"Enabled": true
+		}
+	],
+	"TargetPlatforms": [
+		"Windows",
+		"Linux"
+	]
 }
